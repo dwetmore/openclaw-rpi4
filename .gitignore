@@ -1,0 +1,17 @@
+# Live Openclaw state and secrets
+.openclaw/
+secrets/
+credentials/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.log
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
