@@ -1,0 +1,74 @@
+{
+  "name": "@wetmore-dev/openclaw-rpi4",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sanitized project record for the Openclaw deployment on the Garagely Raspberry Pi 4.",
+  "host": {
+    "name": "Garagely",
+    "platform": "raspberry-pi-4",
+    "os": "linux 6.12.75+rpt-rpi-v8",
+    "arch": "arm64",
+    "node": "24.16.0"
+  },
+  "openclaw": {
+    "version": "2026.5.28",
+    "stateDir": "/home/dwetmore/.openclaw",
+    "configPath": "/home/dwetmore/.openclaw/openclaw.json",
+    "gateway": {
+      "mode": "local",
+      "bind": "lan",
+      "port": 18789,
+      "authMode": "token",
+      "dashboard": "http://192.168.0.168:18789/",
+      "trustedProxies": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "allowedOrigins": [
+        "http://localhost:18789",
+        "http://127.0.0.1:18789",
+        "https://garagely.tailc5b7e8.ts.net"
+      ]
+    },
+    "service": {
+      "manager": "systemd --user",
+      "unit": "openclaw-gateway.service",
+      "unitPath": "/home/dwetmore/.config/systemd/user/openclaw-gateway.service",
+      "execStart": "/usr/bin/node /home/dwetmore/.npm-global/lib/node_modules/openclaw/dist/index.js gateway --port 18789",
+      "restart": "always"
+    },
+    "agent": {
+      "defaultAgent": "main",
+      "defaultModel": "openai-codex/gpt-5.5",
+      "runtime": "OpenAI Codex",
+      "sessionsPath": "/home/dwetmore/.openclaw/agents/main/sessions/sessions.json"
+    },
+    "channels": {
+      "telegram": {
+        "enabled": true,
+        "tokenFile": "/home/dwetmore/.openclaw/secrets/telegram-bot-token",
+        "dmPolicy": "pairing",
+        "groupPolicy": "allowlist",
+        "requireMentionInGroups": true,
+        "ownerAllowFrom": [
+          "telegram:8670716857"
+        ]
+      }
+    },
+    "authProfiles": {
+      "openai-codex:davida.wetmore@gmail.com": {
+        "provider": "openai-codex",
+        "mode": "oauth"
+      }
+    }
+  },
+  "secretsPolicy": {
+    "storeSecretsHere": false,
+    "excluded": [
+      "gateway.auth.token",
+      "telegram bot token",
+      "OAuth credentials",
+      "device auth material"
+    ]
+  }
+}
